@@ -1,0 +1,15 @@
+{
+  "name": "one.somni.yunilib",
+  "displayName": "YuniLib",
+  "description": "A Unity 6 package with various scripting utilities by somni",
+  "version": "0.0.0",
+  "unity": "6000.0",
+  "author": {
+    "name": "somni",
+    "email": "me@somni.one",
+    "url": "https://somni.one"
+  },
+  "dependencies": {
+    "com.unity.render-pipelines.universal": "17.0.3"
+  }
+}
