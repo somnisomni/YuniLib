@@ -1,20 +1,26 @@
 using System;
 using PrimeTween;
 using Somni.YuniLib.Extensions;
+using Somni.YuniLib.Internal;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Somni.YuniLib.UI.Utility {
     [AddComponentMenu("somni YuniLib/UI/Utility/Fade In Out")]
-    public class CommonFadeInOut : MonoBehaviour {
+    public class CommonFadeInOut : SingleTweenActorBase {
         /// <summary>
-        /// A target GameObject to be faded in/out.
+        /// Fade type.
+        /// </summary>
+        public enum FadeType { In, Out }
+
+        /// <summary>
+        /// A custom target GameObject to be faded in/out.
         /// If this is not set, the GameObject attached to this component will be used as the target.
         /// </summary>
         [Header("Target settings")]
         [Tooltip("A custom target GameObject to be faded in/out. If this is not set, the GameObject attached to this component will be used as the target.")]
         [SerializeField]
-        private GameObject customTarget = null;
+        private GameObject target = null;
         
         /// <summary>
         /// Duration of the fade animation.
@@ -32,21 +38,40 @@ namespace Somni.YuniLib.UI.Utility {
         public Ease easing = Ease.OutQuad;
 
         /// <summary>
-        /// Whether to start fade-in animation when this component is enabled.
-        /// If both `fadeInOnEnable` and `fadeOutOnEnable` are true, `fadeInOnEnable` will be prioritized.
+        /// Whether to loop the fade animation.
         /// </summary>
-        [Header("Behavior settings")]
-        [Tooltip("Whether to start fade-in animation when this component is enabled.")]
+        [Tooltip("Whether to loop the fade animation.")]
         [SerializeField]
-        public bool fadeInOnEnable = true;
+        public bool loop = false;
+        
+        /// <summary>
+        /// Cycles of the loop. If set to -1, the loop will be infinite.
+        /// </summary>
+        [Tooltip("Cycles of the loop. If set to -1, the loop will be infinite.")]
+        [SerializeField]
+        public int loopCycles = -1;
 
         /// <summary>
-        /// Whether to start fade-out animation when this component is enabled.
-        /// If both `fadeInOnEnable` and `fadeOutOnEnable` are true, `fadeInOnEnable` will be prioritized.
+        /// Cycle mode of the loop.
         /// </summary>
-        [Tooltip("Whether to start fade-out animation when this component is enabled.")]
+        [Tooltip("Cycle mode of the loop.")]
         [SerializeField]
-        public bool fadeOutOnEnable = false;
+        public CycleMode loopCycleMode = CycleMode.Rewind;
+
+        /// <summary>
+        /// Default fade type.
+        /// </summary>
+        [Header("Default behaviour settings")]
+        [Tooltip("Default fade type.")]
+        [SerializeField]
+        public FadeType defaultFade = FadeType.In;
+
+        /// <summary>
+        /// Whether to start fade animation when this component is enabled.
+        /// </summary>
+        [Tooltip("Whether to start fade animation when this component is enabled.")]
+        [SerializeField]
+        public bool fadeOnEnable = true;
 
         /// <summary>
         /// Whether to destroy the GameObject attached to this component after the fade-out animation is completed.
@@ -80,17 +105,32 @@ namespace Somni.YuniLib.UI.Utility {
         public bool IsFading => tween is { isAlive: true };
         
         private CanvasGroup canvasGroup;
-        private Tween? tween;
         
         private void Awake() {
-            canvasGroup = (customTarget ?? gameObject).GetOrAddComponent<CanvasGroup>();
+            if(!target) {
+                target = gameObject;
+            }
+            
+            canvasGroup = target.GetOrAddComponent<CanvasGroup>();
         }
 
         private void OnEnable() {
-            if (fadeInOnEnable) {
-                FadeIn();
-            } else if (fadeOutOnEnable) {
-                FadeOut();
+            if(fadeOnEnable) {
+                StartAnimation();
+            }
+        }
+
+        /// <inheritdoc />
+        public override void StartAnimation(Action onComplete = null) {
+            switch(defaultFade) {
+                case FadeType.In:
+                    FadeIn(onComplete: onComplete);
+                    break;
+                case FadeType.Out:
+                    FadeOut(onComplete: onComplete);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unknown fade type.");
             }
         }
 
@@ -100,12 +140,16 @@ namespace Somni.YuniLib.UI.Utility {
         /// <param name="beginWithCurrentAlpha">Whether to start the animation with the current alpha value of the CanvasGroup.</param>
         /// <param name="onComplete">A callback function to be called when the animation is completed.</param>
         public void FadeIn(bool beginWithCurrentAlpha = false, Action onComplete = null) {
+            StopAnimation();
+            
             tween = Tween.Alpha(
                     target: canvasGroup,
                     startValue: beginWithCurrentAlpha ? canvasGroup.alpha : 0.0f,
                     endValue: 1.0f,
                     duration: duration,
-                    ease: easing)
+                    ease: easing,
+                    cycles: loop ? loopCycles : 1,
+                    cycleMode: loopCycleMode)
                 .OnComplete(() => {
                     tween = null;
                     onComplete?.Invoke();
@@ -120,12 +164,16 @@ namespace Somni.YuniLib.UI.Utility {
         /// <param name="beginWithCurrentAlpha">Whether to start the animation with the current alpha value of the CanvasGroup.</param>
         /// <param name="onComplete">A callback function to be called when the animation is completed.</param>
         public void FadeOut(bool beginWithCurrentAlpha = false, Action onComplete = null) {
+            StopAnimation();
+            
             tween = Tween.Alpha(
                     target: canvasGroup,
                     startValue: beginWithCurrentAlpha ? canvasGroup.alpha : 1.0f,
                     endValue: 0.0f,
                     duration: duration,
-                    ease: easing)
+                    ease: easing,
+                    cycles: loop ? loopCycles : 1,
+                    cycleMode: loopCycleMode)
                 .OnComplete(() => {
                     tween = null;
                     onComplete?.Invoke();
@@ -133,7 +181,7 @@ namespace Somni.YuniLib.UI.Utility {
                     onFadeOutComplete?.Invoke();
                     
                     if(destroyAfterFadeOut) {
-                        Destroy(customTarget ?? gameObject);
+                        Destroy(target);
                     }
                 });
         }
