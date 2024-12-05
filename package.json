@@ -10,6 +10,7 @@
     "url": "https://somni.one"
   },
   "dependencies": {
-    "com.unity.render-pipelines.universal": "17.0.3"
+    "com.unity.render-pipelines.universal": "17.0.3",
+    "com.kyrylokuzyk.primetween": "1.2.1"
   }
 }

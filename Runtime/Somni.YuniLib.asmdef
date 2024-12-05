@@ -1,4 +1,15 @@
 {
-  "name": "Somni.YuniLib",
-  "rootNamespace": "Somni.YuniLib"
+    "name": "Somni.YuniLib",
+    "rootNamespace": "Somni.YuniLib",
+    "references": [
+        "PrimeTween.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "noEngineReferences": false
 }
