@@ -18,5 +18,19 @@ namespace Somni.YuniLib.Extensions {
         public static RectTransform GetRectTransform(this Component component) {
             return GetRectTransform(component.gameObject);
         }
+        
+        public static TComponent GetOrAddComponent<TComponent>(this GameObject gameObject) where TComponent : Component {
+            if(!gameObject) {
+                throw new ArgumentNullException(nameof(gameObject), "GameObject is null.");
+            }
+            
+            return gameObject.TryGetComponent(out TComponent foundComponent)
+                ? foundComponent
+                : gameObject.AddComponent<TComponent>();
+        }
+        
+        public static TComponent GetOrAddComponent<TComponent>(this Component component) where TComponent : Component {
+            return GetOrAddComponent<TComponent>(component.gameObject);
+        }
     }
 }
