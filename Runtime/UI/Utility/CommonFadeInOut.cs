@@ -8,6 +8,15 @@ namespace Somni.YuniLib.UI.Utility {
     [AddComponentMenu("somni YuniLib/UI/Utility/Fade In Out")]
     public class CommonFadeInOut : MonoBehaviour {
         /// <summary>
+        /// A target GameObject to be faded in/out.
+        /// If this is not set, the GameObject attached to this component will be used as the target.
+        /// </summary>
+        [Header("Target settings")]
+        [Tooltip("A custom target GameObject to be faded in/out. If this is not set, the GameObject attached to this component will be used as the target.")]
+        [SerializeField]
+        private GameObject customTarget = null;
+        
+        /// <summary>
         /// Duration of the fade animation.
         /// </summary>
         [Header("Animation settings")]
@@ -74,7 +83,7 @@ namespace Somni.YuniLib.UI.Utility {
         private Tween? tween;
         
         private void Awake() {
-            canvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
+            canvasGroup = (customTarget ?? gameObject).GetOrAddComponent<CanvasGroup>();
         }
 
         private void OnEnable() {
@@ -124,7 +133,7 @@ namespace Somni.YuniLib.UI.Utility {
                     onFadeOutComplete?.Invoke();
                     
                     if(destroyAfterFadeOut) {
-                        Destroy(gameObject);
+                        Destroy(customTarget ?? gameObject);
                     }
                 });
         }
