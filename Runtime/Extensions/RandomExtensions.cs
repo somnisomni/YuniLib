@@ -7,7 +7,7 @@ namespace Somni.YuniLib.Extensions {
     public static class RandomExtensions {
         public static TElement NextElement<TElement>(this Random random, IEnumerable<TElement> enumerable) {
             if(enumerable == null) {
-                throw new ArgumentException("Enumerable is null.");
+                throw new ArgumentNullException(nameof(enumerable), "Enumerable is null.");
             }
 
             IEnumerable<TElement> elements = enumerable as TElement[] ?? enumerable.ToArray();
