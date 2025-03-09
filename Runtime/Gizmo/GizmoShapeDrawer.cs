@@ -30,5 +30,27 @@ namespace Somni.YuniLib.Gizmo {
             float colorMaxAlpha = 0.5f) {
             DrawCircularSector(target.position, normal, target.forward, angleDegree, radius, color, colorMaxAlpha);
         }
+
+        public static void DrawDisc(Vector3 center,
+            Vector3 normal,
+            float radius,
+            Color color,
+            float colorMaxAlpha = 0.5f) {
+#if UNITY_EDITOR
+            Color originalHandleColor = Handles.color;
+
+            Handles.color = new Color(color.r, color.g, color.b, Mathf.Min(color.a, colorMaxAlpha));
+            Handles.DrawSolidDisc(center, normal, radius);
+            Handles.color = originalHandleColor;
+#endif
+        }
+
+        public static void DrawDisc(Transform target,
+            Vector3 normal,
+            float radius,
+            Color color,
+            float colorMaxAlpha = 0.5f) {
+            DrawDisc(target.position, normal, radius, color, colorMaxAlpha);
+        }
     }
 }
