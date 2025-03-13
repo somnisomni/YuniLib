@@ -11,7 +11,12 @@ namespace UnityEditor {
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
-            GUI.enabled = !Application.isPlaying && ((InspectorReadOnlyAttribute)attribute).RuntimeOnly;
+            if(attribute is InspectorReadOnlyAttribute attr) {
+                GUI.enabled = (attr.Mode == InspectorReadOnlyMode.Both)
+                              || ((attr.Mode == InspectorReadOnlyMode.RuntimeOnly) && !Application.isPlaying)
+                              || ((attr.Mode == InspectorReadOnlyMode.EditorOnly) && Application.isPlaying);
+            }
+
             EditorGUI.PropertyField(position, property, label, true);
             GUI.enabled = true;
         }
@@ -20,12 +25,18 @@ namespace UnityEditor {
 #endif
 
 namespace Somni.YuniLib.Inspector {
+    public enum InspectorReadOnlyMode {
+        Both,
+        RuntimeOnly,
+        EditorOnly,
+    }
+
     [AttributeUsage(AttributeTargets.Field)]
     public class InspectorReadOnlyAttribute : PropertyAttribute {
-        public readonly bool RuntimeOnly;
+        public InspectorReadOnlyMode Mode { get; }
 
-        public InspectorReadOnlyAttribute(bool runtimeOnly = false) {
-            RuntimeOnly = runtimeOnly;
+        public InspectorReadOnlyAttribute(InspectorReadOnlyMode mode = InspectorReadOnlyMode.Both) {
+            Mode = mode;
         }
     }
 }
