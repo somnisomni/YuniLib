@@ -12,9 +12,9 @@ namespace UnityEditor {
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
             if(attribute is InspectorReadOnlyAttribute attr) {
-                GUI.enabled = (attr.Mode == InspectorReadOnlyMode.Both)
-                              || ((attr.Mode == InspectorReadOnlyMode.RuntimeOnly) && !Application.isPlaying)
-                              || ((attr.Mode == InspectorReadOnlyMode.EditorOnly) && Application.isPlaying);
+                GUI.enabled = !((attr.Mode == InspectorReadOnlyMode.Both)
+                              || ((attr.Mode == InspectorReadOnlyMode.RuntimeOnly) && Application.isPlaying)
+                              || ((attr.Mode == InspectorReadOnlyMode.EditorOnly) && !Application.isPlaying));
             }
 
             EditorGUI.PropertyField(position, property, label, true);
