@@ -93,11 +93,11 @@ namespace Somni.YuniLib.Inspector {
         public HeaderExAttribute(string text, HeaderExStyle style) : this(text) {
             switch(style) {
                 case HeaderExStyle.H1:
-                    TextSize = 22;
+                    TextSize = 18;
                     Emphasize = true;
                     break;
                 case HeaderExStyle.H2:
-                    TextSize = 18;
+                    TextSize = 16;
                     break;
                 case HeaderExStyle.H3:
                     TextSize = 14;
