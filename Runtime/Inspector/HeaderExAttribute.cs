@@ -49,12 +49,14 @@ namespace UnityEditor {
             }
             
             Rect textRect = EditorGUI.IndentedRect(position);
+            float originalX = textRect.x;
             textRect.x += attr.Emphasize ? EmphasizeWidth + EmphasizeMargin : 0.0f;
             textRect.y += attr.YPadding;
             textRect.height = textHeight;
-            EditorGUI.LabelField(textRect, label, style);
+            EditorGUI.LabelField(textRect, new GUIContent(attr.Text), style);
             
             Rect propertyRect = textRect;
+            propertyRect.x = originalX;
             propertyRect.y += textRect.height + attr.YPadding;
             propertyRect.height = EditorGUI.GetPropertyHeight(property, label, true);
             EditorGUI.PropertyField(propertyRect, property, label, true);
