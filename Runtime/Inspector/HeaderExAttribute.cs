@@ -70,7 +70,7 @@ namespace Somni.YuniLib.Inspector {
         H3
     }
     
-    [AttributeUsage(AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public class HeaderExAttribute : PropertyAttribute {
         public string Text { get; }
         public int TextSize { get; }
