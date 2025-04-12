@@ -4,11 +4,13 @@ using UnityEngine;
 
 #if UNITY_EDITOR
 namespace UnityEditor {
-    [CustomPropertyDrawer(typeof(HeaderExAttribute), true)]
-    public class HeaderExAttributeAttributeDrawer : PropertyDrawer {
+    [CustomPropertyDrawer(typeof(HeaderExAttribute))]
+    public class HeaderExAttributeDrawer : DecoratorDrawer {
         private const float EmphasizeWidth = 5.0f;
         private const float EmphasizeMargin = 5.0f;
         private const float EmphasizeAlpha = 0.5f;
+        
+        private float cachedTextHeight = 0.0f;
         
         private static GUIStyle GetTextStyle(HeaderExAttribute attr) {
             GUIStyle style = new(EditorStyles.wordWrappedLabel) {
@@ -20,22 +22,22 @@ namespace UnityEditor {
             return style;
         }
         
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+        public override float GetHeight() {
             var attr = (HeaderExAttribute)attribute;
-            GUIStyle style = GetTextStyle(attr);
             
-            float textHeight = style.CalcHeight(new GUIContent(attr.Text), EditorGUIUtility.currentViewWidth);
-            float propertyHeight = EditorGUI.GetPropertyHeight(property, label, true);
+            if(cachedTextHeight > 0.0f) {
+                return cachedTextHeight + (attr.YPadding * 2);
+            }
             
-            return textHeight
-                   + (attr.YPadding * 2)
-                   + propertyHeight;
+            return EditorGUIUtility.singleLineHeight + (attr.YPadding * 2);
         }
 
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+        public override void OnGUI(Rect position) {
             var attr = (HeaderExAttribute)attribute;
             GUIStyle style = GetTextStyle(attr);
+            
             float textHeight = style.CalcHeight(new GUIContent(attr.Text), EditorGUIUtility.currentViewWidth);
+            cachedTextHeight = textHeight;
 
             if(attr.Emphasize) {
                 Rect emphasizeRect = EditorGUI.IndentedRect(position);
@@ -49,17 +51,10 @@ namespace UnityEditor {
             }
             
             Rect textRect = EditorGUI.IndentedRect(position);
-            float originalX = textRect.x;
             textRect.x += attr.Emphasize ? EmphasizeWidth + EmphasizeMargin : 0.0f;
             textRect.y += attr.YPadding;
             textRect.height = textHeight;
             EditorGUI.LabelField(textRect, new GUIContent(attr.Text), style);
-            
-            Rect propertyRect = textRect;
-            propertyRect.x = originalX;
-            propertyRect.y += textRect.height + attr.YPadding;
-            propertyRect.height = EditorGUI.GetPropertyHeight(property, label, true);
-            EditorGUI.PropertyField(propertyRect, property, label, true);
         }
     }
 }
