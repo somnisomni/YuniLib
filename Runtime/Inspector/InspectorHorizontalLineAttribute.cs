@@ -4,17 +4,15 @@ using UnityEngine;
 
 #if UNITY_EDITOR
 namespace UnityEditor {
-    [CustomPropertyDrawer(typeof(InspectorHorizontalLineAttribute), true)]
-    public class InspectorHorizontalLineAttributeDrawer : PropertyDrawer {
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+    [CustomPropertyDrawer(typeof(InspectorHorizontalLineAttribute))]
+    public class InspectorHorizontalLineAttributeDrawer : DecoratorDrawer {
+        public override float GetHeight() {
             var attr = (InspectorHorizontalLineAttribute)attribute;
-            
-            return attr.LineHeight
-                   + (attr.YPadding * 2)
-                   + EditorGUI.GetPropertyHeight(property, label, true);
+
+            return attr.LineHeight + (attr.YPadding * 2);
         }
 
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+        public override void OnGUI(Rect position) {
             var attr = (InspectorHorizontalLineAttribute)attribute;
             
             Color color = GUI.color;
@@ -24,11 +22,6 @@ namespace UnityEditor {
             lineRect.y += attr.YPadding;
             lineRect.height = attr.LineHeight;
             EditorGUI.DrawRect(lineRect, color);
-
-            Rect propertyRect = lineRect;
-            propertyRect.y += attr.LineHeight + attr.YPadding;
-            propertyRect.height = EditorGUI.GetPropertyHeight(property, label, true);
-            EditorGUI.PropertyField(propertyRect, property, label, true);
         }
     }
 }
@@ -41,7 +34,7 @@ namespace Somni.YuniLib.Inspector {
         public float YPadding { get; }
         public float LineColorAlpha { get; }
         
-        public InspectorHorizontalLineAttribute(float lineHeight = 1.0f, float yPadding = 5.0f, float lineColorAlpha = 0.25f) {
+        public InspectorHorizontalLineAttribute(float lineHeight = 1.0f, float yPadding = 7.0f, float lineColorAlpha = 0.25f) {
             LineHeight = lineHeight;
             YPadding = yPadding;
             LineColorAlpha = lineColorAlpha;
