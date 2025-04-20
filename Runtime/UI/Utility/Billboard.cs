@@ -14,6 +14,10 @@ namespace Somni.YuniLib.UI.Utility {
         }
 
         private void LateUpdate() {
+            if(!target) {
+                return;
+            }
+            
             transform.LookAt(
                 worldPosition: transform.position + (target.rotation * Vector3.forward),
                 worldUp: target.rotation * Vector3.up);
