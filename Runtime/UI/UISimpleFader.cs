@@ -2,6 +2,7 @@ using System;
 using PrimeTween;
 using Somni.YuniLib.Extensions;
 using Somni.YuniLib.Inspector;
+using Somni.YuniLib.Inspector.Internal;
 using Somni.YuniLib.Internal;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,6 +19,7 @@ namespace Somni.YuniLib.UI {
         /// A custom target GameObject to be faded in/out.
         /// If this is not set, the GameObject attached to this component will be used as the target.
         /// </summary>
+        [YuniLibBanner(nameof(UISimpleFader))]
         [HeaderEx("Target", HeaderExStyle.H1)]
         [HelpBox("If 'Target To Fade' is not set, the GameObject where this component attached to will be used as the target.")]
         [Tooltip("A custom target GameObject to be faded in/out.")]

@@ -1,12 +1,15 @@
 ﻿using Somni.YuniLib.Inspector;
+using Somni.YuniLib.Inspector.Internal;
 using UnityEngine;
 
 namespace Somni.YuniLib.UI {
-    [AddComponentMenu("somni YuniLib/UI/Billboard")]
+    [AddComponentMenu("somni YuniLib/Billboard")]
     public class Billboard : MonoBehaviour {
+        [YuniLibBanner(nameof(Billboard))]
         [HeaderEx("Target", HeaderExStyle.H1)]
+        [HelpBox("If 'Look Target' is not set, the main camera will be used as the target.")]
+        [Tooltip("A transform that will be rotated at this position. This usually be the transform of Camera.")]
         [SerializeField]
-        [Tooltip("A transform that will be rotated at this position. This usually be the transform of Camera. If this is not specified, the main camera will be used.")]
         public Transform lookTarget;
 
         private Vector3 lastPositionOfTarget;
