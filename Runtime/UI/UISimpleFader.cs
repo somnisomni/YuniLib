@@ -1,15 +1,16 @@
 using System;
 using PrimeTween;
 using Somni.YuniLib.Extensions;
+using Somni.YuniLib.Inspector;
 using Somni.YuniLib.Internal;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Somni.YuniLib.UI.Utility {
-    [AddComponentMenu("somni YuniLib/UI/Utility/Fade In Out")]
-    public class CommonFadeInOut : SingleTweenActorBase {
+namespace Somni.YuniLib.UI {
+    [AddComponentMenu("somni YuniLib/UI/UI Simple Fader")]
+    public class UISimpleFader : SingleTweenActorBase {
         /// <summary>
-        /// Fade type.
+        /// Enum type of fade types.
         /// </summary>
         public enum FadeType { In, Out }
 
@@ -17,15 +18,17 @@ namespace Somni.YuniLib.UI.Utility {
         /// A custom target GameObject to be faded in/out.
         /// If this is not set, the GameObject attached to this component will be used as the target.
         /// </summary>
-        [Header("Target settings")]
-        [Tooltip("A custom target GameObject to be faded in/out. If this is not set, the GameObject attached to this component will be used as the target.")]
+        [HeaderEx("Target", HeaderExStyle.H1)]
+        [HelpBox("If 'Target To Fade' is not set, the GameObject where this component attached to will be used as the target.")]
+        [Tooltip("A custom target GameObject to be faded in/out.")]
         [SerializeField]
-        private GameObject target = null;
+        private GameObject targetToFade = null;
         
         /// <summary>
         /// Duration of the fade animation.
         /// </summary>
-        [Header("Animation settings")]
+        [InspectorHorizontalLine]
+        [HeaderEx("Fade Animation", HeaderExStyle.H1)]
         [Tooltip("Duration of the fade animation.")]
         [SerializeField]
         public float duration = 1.0f;
@@ -59,20 +62,21 @@ namespace Somni.YuniLib.UI.Utility {
         public CycleMode loopCycleMode = CycleMode.Rewind;
 
         /// <summary>
-        /// Default fade type.
-        /// </summary>
-        [Header("Default behaviour settings")]
-        [Tooltip("Default fade type.")]
-        [SerializeField]
-        public FadeType defaultFade = FadeType.In;
-
-        /// <summary>
         /// Whether to start fade animation when this component is enabled.
         /// </summary>
+        [InspectorHorizontalLine]
+        [HeaderEx("Default Behaviour", HeaderExStyle.H1)]
         [Tooltip("Whether to start fade animation when this component is enabled.")]
         [SerializeField]
         public bool fadeOnEnable = true;
-
+        
+        /// <summary>
+        /// Default fade type.
+        /// </summary>
+        [Tooltip("Default fade type to be played when this component is enabled.")]
+        [SerializeField]
+        public FadeType fadeTypeOnEnable = FadeType.In;
+        
         /// <summary>
         /// Whether to destroy the GameObject attached to this component after the fade-out animation is completed.
         /// </summary>
@@ -83,7 +87,8 @@ namespace Somni.YuniLib.UI.Utility {
         /// <summary>
         /// Events to be invoked when the fade animation is completed, regardless of fade-in or fade-out.
         /// </summary>
-        [Header("Events")]
+        [InspectorHorizontalLine]
+        [HeaderEx("Event", HeaderExStyle.H1)]
         [Tooltip("Events to be invoked when the fade animation is completed, regardless of fade-in or fade-out.")]
         public UnityEvent onFadeComplete;
         
@@ -107,11 +112,11 @@ namespace Somni.YuniLib.UI.Utility {
         private CanvasGroup canvasGroup;
         
         private void Awake() {
-            if(!target) {
-                target = gameObject;
+            if(!targetToFade) {
+                targetToFade = gameObject;
             }
             
-            canvasGroup = target.GetOrAddComponent<CanvasGroup>();
+            canvasGroup = targetToFade.GetOrAddComponent<CanvasGroup>();
         }
 
         private void OnEnable() {
@@ -122,7 +127,7 @@ namespace Somni.YuniLib.UI.Utility {
 
         /// <inheritdoc />
         public override void StartAnimation(Action onComplete = null) {
-            switch(defaultFade) {
+            switch(fadeTypeOnEnable) {
                 case FadeType.In:
                     FadeIn(onComplete: onComplete);
                     break;
@@ -157,7 +162,7 @@ namespace Somni.YuniLib.UI.Utility {
                     onFadeInComplete?.Invoke();
                 });
         }
-
+        
         /// <summary>
         /// Start the fade-out animation.
         /// </summary>
@@ -181,7 +186,7 @@ namespace Somni.YuniLib.UI.Utility {
                     onFadeOutComplete?.Invoke();
                     
                     if(destroyAfterFadeOut) {
-                        Destroy(target);
+                        Destroy(targetToFade);
                     }
                 });
         }

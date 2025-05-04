@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-namespace Somni.YuniLib.UI.Utility {
-    [AddComponentMenu("somni YuniLib/UI/Utility/Billboard")]
+namespace Somni.YuniLib.UI {
+    [AddComponentMenu("somni YuniLib/UI/Billboard")]
     public class Billboard : MonoBehaviour {
         [SerializeField]
         [Tooltip("A transform that will be rotated at this position. This usually be the transform of Camera. If this is not specified, the main camera will be used.")]
