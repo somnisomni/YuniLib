@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Somni.YuniLib.Editor.Inspector {
     [CustomPropertyDrawer(typeof(HelpBoxAttribute))]
-    public class HelpBoxDrawer : DecoratorDrawer {
+    internal class HelpBoxDrawer : DecoratorDrawer {
         private const float MinimumHeight = 50.0f;
         
         private float cachedTextHeight = 0.0f;

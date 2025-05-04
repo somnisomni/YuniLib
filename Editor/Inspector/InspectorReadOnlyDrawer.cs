@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Somni.YuniLib.Editor.Inspector {
     [CustomPropertyDrawer(typeof(InspectorReadOnlyAttribute), true)]
-    public class InspectorReadOnlyDrawer : PropertyDrawer {
+    internal class InspectorReadOnlyDrawer : PropertyDrawer {
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
             return EditorGUI.GetPropertyHeight(property, label, true);
         }

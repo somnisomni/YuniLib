@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Somni.YuniLib.Editor.Inspector {
     [CustomPropertyDrawer(typeof(HeaderExAttribute))]
-    public class HeaderExDrawer : DecoratorDrawer {
+    internal class HeaderExDrawer : DecoratorDrawer {
         private const float EmphasizeWidth = 5.0f;
         private const float EmphasizeMargin = 5.0f;
         private const float EmphasizeAlpha = 0.5f;

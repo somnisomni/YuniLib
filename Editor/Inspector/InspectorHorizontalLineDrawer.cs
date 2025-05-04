@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Somni.YuniLib.Editor.Inspector {
     [CustomPropertyDrawer(typeof(InspectorHorizontalLineAttribute))]
-    public class InspectorHorizontalLineDrawer : DecoratorDrawer {
+    internal class InspectorHorizontalLineDrawer : DecoratorDrawer {
         public override float GetHeight() {
             var attr = (InspectorHorizontalLineAttribute)attribute;
 
