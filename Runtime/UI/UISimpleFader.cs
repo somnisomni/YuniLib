@@ -167,8 +167,9 @@ namespace Somni.YuniLib.UI {
         /// Start the fade-out animation.
         /// </summary>
         /// <param name="beginWithCurrentAlpha">Whether to start the animation with the current alpha value of the CanvasGroup.</param>
+        /// <param name="preventDestroy">Whether to prevent the GameObject from being destroyed after the fade-out animation is completed. This overrides the value of <see cref="destroyAfterFadeOut" /> if this param's value is <c>true</c>.</param>
         /// <param name="onComplete">A callback function to be called when the animation is completed.</param>
-        public void FadeOut(bool beginWithCurrentAlpha = false, Action onComplete = null) {
+        public void FadeOut(bool beginWithCurrentAlpha = false, bool preventDestroy = false, Action onComplete = null) {
             StopAnimation();
             
             tween = Tween.Alpha(
@@ -185,7 +186,7 @@ namespace Somni.YuniLib.UI {
                     onFadeComplete?.Invoke();
                     onFadeOutComplete?.Invoke();
                     
-                    if(destroyAfterFadeOut) {
+                    if(destroyAfterFadeOut && !preventDestroy) {
                         Destroy(targetToFade);
                     }
                 });
