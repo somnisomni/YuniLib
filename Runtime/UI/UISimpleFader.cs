@@ -3,7 +3,7 @@ using PrimeTween;
 using Somni.YuniLib.Extensions;
 using Somni.YuniLib.Inspector;
 using Somni.YuniLib.Inspector.Internal;
-using Somni.YuniLib.Internal;
+using Somni.YuniLib.Internal.Animations;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -25,43 +25,14 @@ namespace Somni.YuniLib.UI {
         [Tooltip("A custom target GameObject to be faded in/out.")]
         [SerializeField]
         private GameObject targetToFade = null;
-        
+
         /// <summary>
-        /// Duration of the fade animation.
+        /// Animation data for the fade animation.
         /// </summary>
         [InspectorHorizontalLine]
         [HeaderEx("Fade Animation", HeaderExStyle.H1)]
-        [Tooltip("Duration of the fade animation.")]
         [SerializeField]
-        public float duration = 1.0f;
-
-        /// <summary>
-        /// Easing function of the fade animation.
-        /// </summary>
-        [Tooltip("Easing function of the fade animation.")]
-        [SerializeField]
-        public Ease easing = Ease.OutQuad;
-
-        /// <summary>
-        /// Whether to loop the fade animation.
-        /// </summary>
-        [Tooltip("Whether to loop the fade animation.")]
-        [SerializeField]
-        public bool loop = false;
-        
-        /// <summary>
-        /// Cycles of the loop. If set to -1, the loop will be infinite.
-        /// </summary>
-        [Tooltip("Cycles of the loop. If set to -1, the loop will be infinite.")]
-        [SerializeField]
-        public int loopCycles = -1;
-
-        /// <summary>
-        /// Cycle mode of the loop.
-        /// </summary>
-        [Tooltip("Cycle mode of the loop.")]
-        [SerializeField]
-        public CycleMode loopCycleMode = CycleMode.Rewind;
+        public TweenAnimationData animationData;
 
         /// <summary>
         /// Whether to start fade animation when this component is enabled.
@@ -153,10 +124,11 @@ namespace Somni.YuniLib.UI {
                     target: canvasGroup,
                     startValue: beginWithCurrentAlpha ? canvasGroup.alpha : 0.0f,
                     endValue: 1.0f,
-                    duration: duration,
-                    ease: easing,
-                    cycles: loop ? loopCycles : 1,
-                    cycleMode: loopCycleMode)
+                    duration: animationData.duration,
+                    ease: animationData.easing,
+                    cycles: animationData.loop ? animationData.loopCycles : 1,
+                    cycleMode: animationData.loopCycleMode,
+                    useUnscaledTime: animationData.ignoreTimeScale)
                 .OnComplete(() => {
                     tween = null;
                     onComplete?.Invoke();
@@ -178,10 +150,11 @@ namespace Somni.YuniLib.UI {
                     target: canvasGroup,
                     startValue: beginWithCurrentAlpha ? canvasGroup.alpha : 1.0f,
                     endValue: 0.0f,
-                    duration: duration,
-                    ease: easing,
-                    cycles: loop ? loopCycles : 1,
-                    cycleMode: loopCycleMode)
+                    duration: animationData.duration,
+                    ease: animationData.easing,
+                    cycles: animationData.loop ? animationData.loopCycles : 1,
+                    cycleMode: animationData.loopCycleMode,
+                    useUnscaledTime: animationData.ignoreTimeScale)
                 .OnComplete(() => {
                     tween = null;
                     onComplete?.Invoke();

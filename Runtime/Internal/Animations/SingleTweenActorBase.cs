@@ -2,7 +2,7 @@ using System;
 using PrimeTween;
 using UnityEngine;
 
-namespace Somni.YuniLib.Internal {
+namespace Somni.YuniLib.Internal.Animations {
     internal interface ITweenActor {
         public void StartAnimation(Action onComplete = null);
         public void StopAnimation(bool immediate = false);
