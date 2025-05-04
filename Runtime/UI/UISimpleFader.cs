@@ -31,6 +31,7 @@ namespace Somni.YuniLib.UI {
         /// </summary>
         [InspectorHorizontalLine]
         [HeaderEx("Fade Animation", HeaderExStyle.H1)]
+        [Tooltip("Common animation data for the fade animation.")]
         [SerializeField]
         public TweenAnimationData animationData;
 
