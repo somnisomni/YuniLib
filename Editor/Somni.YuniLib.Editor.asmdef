@@ -1,0 +1,17 @@
+{
+    "name": "Somni.YuniLib.Editor",
+    "rootNamespace": "Somni.YuniLib.Editor",
+    "references": [
+        "Somni.YuniLib"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "noEngineReferences": false
+}
